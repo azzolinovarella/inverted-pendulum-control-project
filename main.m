@@ -25,7 +25,8 @@ g = 9.81;  % [g] = m/s^2
 % Planta
 P = ng*nm*Kg*Kt/(s^2*(Rm*rmp*Mc + Rm*nm*Kg^2*Jm/rmp) + s*(Rm*rmp*Beq + ng*Kg^2*Kt*Km/rmp));
 
-% Validacao do sistema
+% Validacao do sistema  --> Acho legal substituir todo esse bloco por uma so funcao de validacao que traz todas essas representacoes... que tal?
+% Daqui ----------
 figure
 margin(P, w)
 grid on
@@ -40,6 +41,18 @@ plot(t, y_, 'r')
 legend('Setpoint', 'Saida')
 title(sprintf('Resposta a rampa - e_{ess} = %.2f %s', (r(end) - y_(end))*100, '%'))  % PORCO!!!
 grid on
+
+figure
+t = linspace(0, 50, 1E4);
+r = ones(length(t), 1);
+y_ = step(feedback(P, 1), t);
+plot(t, r, 'k--')
+hold on
+plot(t, y_, 'r')
+legend('Setpoint', 'Saida')
+title(sprintf('Resposta ao degrau - p_{ss} = %.2f %s', (max(y_) - y_(end))*100, '%'))  % PORCO!!!
+grid on
+% Ate aqui -------
 
 %% Compensador por avanco
 

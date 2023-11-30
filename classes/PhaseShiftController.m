@@ -17,6 +17,7 @@ classdef PhaseShiftController
             obj = obj.setTransferFunction();
         end
         
+        % Getters
         function K = getK(obj)
             K = obj.K;
         end
@@ -37,8 +38,8 @@ classdef PhaseShiftController
 
     methods (Access = private)
         % Auxiliares
-        function sys_type = getSysType(obj)
-            sys_type = sum(pole(obj.sys) == 0);
+        function sysType = getSysType(obj)
+            sysType = sum(pole(obj.sys) == 0);
         end
 
         function wcg = getWcg(obj)
