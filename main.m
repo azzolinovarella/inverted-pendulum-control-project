@@ -15,7 +15,7 @@ P = buildPlant();
 wBode = logspace(-1, 2, 1E3);
 tRamp = linspace(0, 50, 1E3);
 tStep = linspace(0, 50, 1E3);
-validateSystem(P, wBode, tRamp, tStep);
+%validateSystem(P, wBode, tRamp, tStep);
 
 %% Compensador por avanco
 
@@ -25,18 +25,24 @@ mp = 5/100;
 
 % Convertendo para especificacoes na frequencia
 Kv = 1/ess;
-MF = 75;  % Ajustaremos iterativamente
-tol = 5;
+MF_lead = 75;  % Ajustaremos iterativamente
+tol_lead = 5;
 
-Gc = projectPhaseLeadCompensator(P, Kv, MF + tol);
+% Gc_lead = projectPhaseLeadCompensator(P, Kv, MF_lead + tol_lead);
 
 % Validacao do sistema compensado
 wBode = logspace(-1, 2, 1E3);
 tRamp = linspace(0, 5, 1E3);
 tStep = linspace(0, 1, 1E3);
-validateSystem(Gc*P, wBode, tRamp, tStep);
+% validateSystem(Gc_lead*P, wBode, tRamp, tStep);
 
 %% Compensador por atraso
+
+MF_lag = 65;  % Ajustaremos iterativamente
+tol_lag = 5;
+
+Gc_lag = projectPhaseLagCompensator(P, Kv, MF_lag + tol_lag);
+validateSystem(Gc_lag*P, wBode, tRamp, tStep);
 
 
 
