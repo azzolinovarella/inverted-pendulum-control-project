@@ -65,14 +65,7 @@ Kv = 1/ess;
 MF = 75;  % Ajustaremos iterativamente
 tol = 5;
 
-psc = PhaseShiftController(P, Kv, MF, tol);
-Gc = psc.transferFunction();
-
-% for MF = [...]:
-%     Gc = projectController(P, Kv, MF , tol);
-%     validateController(P, Gc);
-%     z
-% end
+Gc = projectPhaseLeadCompensator(P, Kv, MF + tol);
 
 % Validando o sistema compensado
 figure
@@ -98,5 +91,5 @@ plot(t, r, 'k--')
 hold on
 plot(t, y_, 'r')
 legend('Setpoint', 'Saida')
-title(sprintf('Resposta ao degrau - p_{ss} = %.2f %s', (max(y_) - y_(end))/y(end)*100, '%'))  % PORCO!!!
+title(sprintf('Resposta ao degrau - p_{ss} = %.2f %s', (max(y_) - y_(end))/y_(end)*100, '%'))  % PORCO!!!
 grid on
