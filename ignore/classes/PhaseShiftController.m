@@ -1,11 +1,10 @@
 classdef PhaseShiftController
     
     properties (Access = private)
-        sys
+        sys  % Sistema a ser controlado (planta)
         K
         alpha
         T
-        transferFunction
     end
     
     methods
@@ -14,7 +13,13 @@ classdef PhaseShiftController
             obj = obj.setK(errorConstant);
             obj = obj.setAlpha(phaseMargin + tolerance);
             obj = obj.setT();
-            obj = obj.setTransferFunction();
+        end
+        
+        % Funcao mais importante -> traz a TF do controlador para a planta referida
+        function transferFunction = transferFunction(obj)
+            s = tf('s');
+
+            transferFunction = obj.K*(1 + obj.T*s)/(1 + obj.alpha*obj.T*s);
         end
         
         % Getters
@@ -28,12 +33,7 @@ classdef PhaseShiftController
 
         function T = getT(obj)
             T = obj.T;
-        end
-
-        function transferFunction = getTransferFunction(obj)
-            transferFunction = obj.transferFunction;
-        end
-        
+        end        
     end
 
     methods (Access = private)
@@ -43,11 +43,11 @@ classdef PhaseShiftController
         end
 
         function wcg = getWcg(obj)
-            [sysMag, ~, w, ~, ~] = bode(obj.sys*obj.K);
+            [sysMag, ~, w, ~, ~] = bode(obj.sys*obj.K);  % Da para substituir toda essa logica por [~, ~, ~, wgc_] = margin(P*sys.K*1/sqrt(sys.alpha))
             sysMag = squeeze(mag2db(sysMag));
             alphaLoss = -20*log10(1/sqrt(obj.alpha));
             absDelta = abs((sysMag - alphaLoss));
-
+            
             wcg = w(absDelta == min(absDelta));
         end
         
@@ -76,12 +76,6 @@ classdef PhaseShiftController
             wcg = obj.getWcg();
             
             obj.T = 1/(wcg*sqrt(obj.alpha));
-        end
-
-        function obj = setTransferFunction(obj)
-            s = tf('s');
-
-            obj.transferFunction = obj.K*(1 + obj.T*s)/(1 + obj.alpha*obj.T*s);
         end
     end
 end
