@@ -6,30 +6,16 @@ addpath(genpath('./functions'))
 % Para deixar os graficos mais bonitos (facilita na hora de colocar no relatorio)
 set(0, 'DefaultLineLineWidth', 2, 'DefaultAxesFontSize', 14, 'DefaultAxesFontName', 'Latin Modern Roman')
 
+
 %% Definicao da planta e verificacao do sistema nao compensado
-
-% Parametros
-Rm = 2.6;      % [Rm] = ohm
-Jm = 3.9E-7;   % [Jm] = kg m^2
-Kt = 7.68E-3;  % [Kt] = Nm/A
-nm = 1;        % [nm] = 1 (adimensional
-Km = 7.68E-3;  % [Km] = V/(rad/s)
-Kg = 3.71;     % [Kg] = 1 (adimensional
-ng = 1;        % [ng] = 1 (adimensional
-Mc = 0.94;     % [Mc] = kg
-rmp = 0.0063;  % [rmp] = m
-Beq = 5.4;     % [Beq] = N/(m(rad/s))
-g = 9.81;      % [g] = m/s^2
-
 % Planta
-s = tf('s');
-P = ng*nm*Kg*Kt/(s^2*(Rm*rmp*Mc + Rm*nm*Kg^2*Jm/rmp) + s*(Rm*rmp*Beq + ng*Kg^2*Kt*Km/rmp));
+P = buildPlant();
 
 % Validacao do sistema
 wBode = logspace(-1, 2, 1E3);
 tRamp = linspace(0, 50, 1E3);
 tStep = linspace(0, 50, 1E3);
-validateSystem(P, wBode, tRamp, tStep);
+%validateSystem(P, wBode, tRamp, tStep);
 
 %% Compensador por avanco
 
@@ -39,13 +25,26 @@ mp = 5/100;
 
 % Convertendo para especificacoes na frequencia
 Kv = 1/ess;
-MF = 75;  % Ajustaremos iterativamente
-tol = 5;
+MF_lead = 75;  % Ajustaremos iterativamente
+tol_lead = 5;
 
-Gc = projectPhaseLeadCompensator(P, Kv, MF + tol);
+% Gc_lead = projectPhaseLeadCompensator(P, Kv, MF_lead + tol_lead);
 
 % Validacao do sistema compensado
 wBode = logspace(-1, 2, 1E3);
 tRamp = linspace(0, 5, 1E3);
 tStep = linspace(0, 1, 1E3);
-validateSystem(Gc*P, wBode, tRamp, tStep);
+% validateSystem(Gc_lead*P, wBode, tRamp, tStep);
+
+%% Compensador por atraso
+
+MF_lag = 65;  % Ajustaremos iterativamente
+tol_lag = 5;
+
+Gc_lag = projectPhaseLagCompensator(P, Kv, MF_lag + tol_lag);
+validateSystem(Gc_lag*P, wBode, tRamp, tStep);
+
+
+
+
+
