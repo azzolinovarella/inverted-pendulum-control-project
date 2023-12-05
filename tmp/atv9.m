@@ -1,18 +1,20 @@
 clear; close all; clc
 
+addpath(genpath('../functions'))
+
 s = tf('s');
 
 %% Planta e especificacoes
 
-% Planta - ex 3
-G = 1/(s*(s + 8)*(s + 30));
-% Ganho
-K = 2400;  % Kv = 10
-% Especificacoes
-Mp = 10/100; 
-tp = 0.6;
-% ts = 0.01;
-tol = 5;
+% % Planta - ex 3
+% G = 1/(s*(s + 8)*(s + 30));
+% % Ganho
+% K = 2400;  % Kv = 10
+% % Especificacoes
+% Mp = 10/100; 
+% tp = 0.6;
+% % ts = 0.01;
+% tol = 5;
 
 % % Planta - ex 2
 % G = 1/(s * (s + 4)*(s + 2));
@@ -30,6 +32,13 @@ tol = 5;
 % Mp = 15/100; 
 % ts = 0.3;
 % tol = 15;
+
+% % Planta - projeto
+G = buildPlant();
+K =  7627; % desired_ess = 0.1/100;
+Mp = 5/100;  % Reduz um pouco mais o pss mas aumenta ts
+tp = 0.1;
+tol = 5;
 
 % Planta com ganho ajustado
 G1 = K*G;
