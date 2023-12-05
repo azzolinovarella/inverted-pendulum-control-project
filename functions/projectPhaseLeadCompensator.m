@@ -1,21 +1,21 @@
-function compensator_transfer_function = projectPhaseLeadCompensator(plant_transfer_function, desired_error_constant, desired_phase_margin)
+function compensator_tf = projectPhaseLeadCompensator(plant_tf, desired_ess, desired_phase_margin)
     s = tf('s');
 
-    % Cálculo de K
-    sys_type = sum(pole(plant_transfer_function) == 0);
-    error_constant = evalfr(plant_transfer_function*(s^sys_type), eps);
-    K = desired_error_constant/error_constant;
+    % Calculo de K
+    sys_type = sum(pole(plant_tf) == 0);
+    error_constant = evalfr(plant_tf*(s^sys_type), eps);
+    ess = 1/error_constant;
+    K = ess/desired_ess;
 
-    % Cálculo de alpha
-    [~, phase_margin] = margin(K*plant_transfer_function);  % Ganho do sistema com ganho ajustado mas não compensado
+    % Calculo de alpha
+    [~, phase_margin] = margin(K*plant_tf);
     phi = deg2rad(desired_phase_margin - phase_margin);
     alpha = (1 - sin(phi))/(1 + sin(phi));
 
-    % Cálculo de T
-    [~, ~, ~, wgc] = margin(K*plant_transfer_function/sqrt(alpha));  % Nova frequência de corte de ganho desejada
-    T = 1/(wgc*sqrt(alpha));
+    % Calculo de T
+    [~, ~, ~, wm] = margin(K*plant_tf/sqrt(alpha)); 
+    T = 1/(wm*sqrt(alpha));
         
-    % Função de transferência
-    compensator_transfer_function = K*(1 + s*T)/(1 + s*T*alpha);
+    % Funcao de transferencia do compensador
+    compensator_tf = K*(1 + s*T)/(1 + s*T*alpha);
 end
-

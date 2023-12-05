@@ -1,5 +1,6 @@
-function P = buildPlant()
+function plant_transfer_function = buildPlant()
     s = tf('s');
+
     % Parametros
     Rm = 2.6;      % [Rm] = ohm
     Jm = 3.9E-7;   % [Jm] = kg m^2
@@ -13,5 +14,5 @@ function P = buildPlant()
     Beq = 5.4;     % [Beq] = N/(m(rad/s))
     g = 9.81;      % [g] = m/s^2
 
-    P = ng*nm*Kg*Kt/(s^2*(Rm*rmp*Mc + Rm*nm*Kg^2*Jm/rmp) + s*(Rm*rmp*Beq + ng*Kg^2*Kt*Km/rmp));
+    plant_transfer_function = ng*nm*Kg*Kt/(s^2*(Rm*rmp*Mc + Rm*nm*Kg^2*Jm/rmp) + s*(Rm*rmp*Beq + ng*Kg^2*Kt*Km/rmp));
 end
