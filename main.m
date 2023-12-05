@@ -4,18 +4,27 @@ close all; clear; clc
 addpath(genpath('./functions'))
 
 % Para deixar os graficos mais bonitos (facilita na hora de colocar no relatorio)
-set(0, 'DefaultLineLineWidth', 2, 'DefaultAxesFontSize', 14, 'DefaultAxesFontName', 'Latin Modern Roman')
+set(0, 'DefaultLineLineWidth', 2, ...
+    'DefaultAxesFontSize', 14, ...
+    'DefaultAxesFontName', 'Latin Modern Roman', ...
+    'DefaultTextFontName', 'Latin Modern Roman', ...
+    'DefaultFigureVisible', 'off')  % Para evitar abrir milhares de graficos...
 
 %% Definicao da planta e verificacao do sistema nao compensado
 
 % Planta
 P = buildPlant();
 
-% Validacao do sistema
+% Validacao do nao compensado sistema
 w_bode = logspace(-1, 2, 1E3);
 t_ramp = linspace(0, 50, 1E3);
 t_step = linspace(0, 50, 1E3);
-% plotSystemResponse(P, w_bode, t_ramp, t_step);
+[fig1, fig2, fig3] =  plotSystemResponse(P, w_bode, t_ramp, t_step);
+
+% Exportando figuras
+saveFig(fig1, './figs/bode_nocomp.png')
+saveFig(fig2, './figs/ramp_nocomp.png')
+saveFig(fig3, './figs/step_nocomp.png')
 
 %% Compensador por avanco
 
@@ -42,7 +51,12 @@ for MF_lead = MF_lead_start:5:180
 end
 
 % Validacao do sistema compensado
-% plotSystemResponse(Gc_lead*P, w_bode_lead, t_ramp_lead, t_step_lead);
+[fig1_lead, fig2_lead, fig3_lead] = plotSystemResponse(Gc_lead*P, w_bode_lead, t_ramp_lead, t_step_lead);
+
+% Exportando figuras
+saveFig(fig1_lead, './figs/bode_lead.png')
+saveFig(fig2_lead, './figs/ramp_lead.png')
+saveFig(fig3_lead, './figs/step_lead.png')
 
 %% Compensador por atraso
 
@@ -72,7 +86,12 @@ for MF_lag = MF_lag_start:5:180
 end
 
 % Validacao do sistema compensado
-plotSystemResponse(Gc_lag*P, w_bode_lag, t_ramp_lag, t_step_lag);
+[fig1_lag, fig2_lag, fig3_lag] = plotSystemResponse(Gc_lag*P, w_bode_lag, t_ramp_lag, t_step_lag);
+
+% Exportando figuras
+saveFig(fig1_lag, './figs/bode_lag.png')
+saveFig(fig2_lag, './figs/ramp_lag.png')
+saveFig(fig3_lag, './figs/step_lag.png')
 
 %% Compensador por avanco-atraso
 
@@ -100,4 +119,9 @@ for tol_leadlag = tol_leadlag_start:1:20
 end
 
 % Validacao do sistema compensado
-plotSystemResponse(Gc_leadlag*P, w_bode_leadlag, t_ramp_leadlag, t_step_leadlag);
+[fig1_leadlag, fig2_leadlag, fig3_leadlag] = plotSystemResponse(Gc_leadlag*P, w_bode_leadlag, t_ramp_leadlag, t_step_leadlag);
+
+% Exportando figuras
+saveFig(fig1_leadlag, './figs/bode_leadlag.png')
+saveFig(fig2_leadlag, './figs/ramp_leadlag.png')
+saveFig(fig3_leadlag, './figs/step_leadlag.png')
