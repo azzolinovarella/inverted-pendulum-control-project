@@ -16,7 +16,7 @@ set(0, 'DefaultLineLineWidth', 2, ...
 P = buildPlant();
 
 % Validacao do nao compensado sistema
-w_bode = logspace(-1, 2, 1E3);
+w_bode = logspace(-1, 4, 1E3);
 t_ramp = linspace(0, 50, 1E3);
 t_step = linspace(0, 50, 1E3);
 [fig1, fig2, fig3] =  plotSystemResponse(P, w_bode, t_ramp, t_step);
@@ -35,8 +35,8 @@ mp_lead = 5/100;
 % Convertendo para especificacoes na frequencia
 MF_lead_start = 45; % Valor inicial
 
-% Para encontrarmos o melhor compensador de forma automatica  --> talvez substituir isso por outra func? kkkk
-w_bode_lead = logspace(-1, 2, 1E3);  % Tempo muda de um compensador pro outro! 
+% Para encontrarmos o melhor compensador de forma automatica
+w_bode_lead = logspace(-1, 4, 1E3);  % Tempo muda de um compensador pro outro! 
 t_ramp_lead = linspace(0, 5, 1E3);
 t_step_lead = linspace(0, 1, 1E3);
 
@@ -68,11 +68,11 @@ mp_lag = 10/100;  % Aumenta um pouco mais o pss mas diminui o ts (melhor trade-o
 % Convertendo para especificacoes na frequencia
 MF_lag_start = 45;  % Valor inicial
 
-% Para encontrarmos o melhor compensador de forma automatica  --> talvez substituir isso por outra func? kkkk
-w_bode_lag = logspace(-1, 2, 1E3);  % Tempo muda de um compensador pro outro!
-% t_ramp_lag = linspace(0, 1E4, 1E3);
+% Para encontrarmos o melhor compensador de forma automatica
+w_bode_lag = logspace(-1, 4, 1E3);  % Tempo muda de um compensador pro outro!
+% t_ramp_lag = linspace(0, 1E4, 1E3);  % Para mp_lag = 5/100 (mais lento)
 % t_step_lag = linspace(0, 400, 1E4);
-t_ramp_lag = linspace(0, 1E2, 1E3);
+t_ramp_lag = linspace(0, 1E2, 1E3);  % Para mp_lag = 10/100 (mais rapido)
 t_step_lag = linspace(0, 10, 1E4);
 
 for MF_lag = MF_lag_start:5:180
@@ -103,8 +103,8 @@ tp_leadlag = 0.1;  % Aumenta um pouco mais o pss mas diminui o ts (melhor trade-
 % Convertendo para especificacoes na frequencia
 tol_leadlag_start = 0;  % Valor inicial
 
-% Para encontrarmos o melhor compensador de forma automatica  --> talvez substituir isso por outra func? kkkk
-w_bode_leadlag = logspace(-1, 2, 1E3);  % Tempo muda de um compensador pro outro!
+% Para encontrarmos o melhor compensador de forma automatica
+w_bode_leadlag = logspace(-1, 4, 1E3);  % Tempo muda de um compensador pro outro!
 t_ramp_leadlag = linspace(0, 10, 1E3);
 t_step_leadlag = linspace(0, 1, 1E3);
 

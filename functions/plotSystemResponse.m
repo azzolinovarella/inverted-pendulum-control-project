@@ -1,20 +1,22 @@
 function [fig1, fig2, fig3] = plotSystemResponse(open_loop_transfer_function, w_bode, t_ramp, t_step)
-    closed_loop_transfer_function = feedback(open_loop_transfer_function, 1);
+    % closed_loop_transfer_function = feedback(open_loop_transfer_function, 1);
     
     % Reaproveitando a implementacao da outra funcao
     [peak_time, overshoot, steady_state_error, y_step, y_ramp] = getMetrics(open_loop_transfer_function, t_ramp, t_step);
 
     % Diagrama de bode
-    [mag, phase] = bode(closed_loop_transfer_function, w_bode);
+    % [mag, phase] = bode(closed_loop_transfer_function, w_bode);  % Devemos pegar em malha aberta ou fechada?
+    [mag, phase] = bode(open_loop_transfer_function, w_bode);
     mag = squeeze(mag2db(mag));
     phase = squeeze(phase);
+    [~, phase_margin, ~, wcg] = margin(open_loop_transfer_function);
     fig1 = figure;
     ax11 = subplot(2, 1, 1);
     semilogx(w_bode, mag)
     ylabel('Magnitude [dB]')
     xlabel('\omega [rad/s]')
     grid on
-    title('Diagrama de Bode')
+    title(sprintf('Diagrama de Bode de malha aberta -  MF = %.2f ° (em %.2f rad/s)', phase_margin, wcg))
     ax12 = subplot(2, 1, 2);
     semilogx(w_bode, phase)
     ylabel('Fase [°]')
