@@ -12,7 +12,7 @@ function compensator_tf = projectPhaseLeadLagCompensator(plant_tf, desired_ess, 
     wn = pi/(peak_time*sqrt(1 - xi^2));
     BW = wn*sqrt((1 - 2*xi^2) + sqrt(4*xi^4 - 4*xi^2 + 2));
     
-    % Projeto atraso
+    % Projeto avanco
     desired_phase_margin = atand(2*xi/sqrt(-2*xi^2 + sqrt(1 + 4*xi^4)));
     wcg = 0.8*BW;
     w = linspace(0.9*wcg, 1.1*wcg, 1E3);  % Para centralizar em wcg e melhorar precisao
@@ -22,14 +22,14 @@ function compensator_tf = projectPhaseLeadLagCompensator(plant_tf, desired_ess, 
     phase_margin = 180 + gamma;
     phi = desired_phase_margin - phase_margin + tolerance;
     alpha = (1 - sind(phi))/(1 + sind(phi));
+    T1 = 1/(wcg*sqrt(alpha));
+    lead_compensator_tf = (1 + s*T1)/(1 + s*T1*alpha);
+
+    % Projeto atraso
     beta = 1/alpha;
     T2 = 1/(wcg/10);
-    lag_compensator_tf = 1/beta*(s + 1/T2)/(s + 1/(beta*T2));
-
-    % Projeto avanco
-    T1 = 1/(wcg*sqrt(alpha));
-    lead_compensator_tf = 1/alpha*(s + 1/T1)/(s + 1/(alpha*T1));
+    lag_compensator_tf = (1 + s*T2)/(1 + s*T2*beta);
 
     % Funcao de transferencia do compensador
-    compensator_tf = K*lag_compensator_tf*lead_compensator_tf;
+    compensator_tf = K*lead_compensator_tf*lag_compensator_tf;
 end

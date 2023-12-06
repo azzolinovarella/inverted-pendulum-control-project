@@ -14,7 +14,7 @@ function [fig1, fig2, fig3, fig4] = plotSystemResponse(open_loop_transfer_functi
     ylabel('Magnitude [dB]')
     xlabel('\omega [rad/s]')
     grid on
-    title(sprintf('Diagrama de Bode de malha aberta -  MF = %.2f ° (em %.2f rad/s)', phase_margin, wcg))
+    title(sprintf('Diagrama de Bode de malha aberta - MF = %.2f ° (em %.2f rad/s)', phase_margin, wcg))
     ax12 = subplot(2, 1, 2);
     semilogx(w_bode, phase_ol)
     ylabel('Fase [°]')
@@ -34,7 +34,7 @@ function [fig1, fig2, fig3, fig4] = plotSystemResponse(open_loop_transfer_functi
     ylabel('Magnitude [dB]')
     xlabel('\omega [rad/s]')
     grid on
-    title(sprintf('Diagrama de Bode de malha fechada -  BW = %.2f rad/s', BW))
+    title(sprintf('Diagrama de Bode de malha fechada - BW = %.2f rad/s', BW))
     ax12 = subplot(2, 1, 2);
     semilogx(w_bode, phase_cl)
     ylabel('Fase [°]')
